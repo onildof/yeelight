@@ -1,3 +1,4 @@
+/*
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -16,3 +17,28 @@ app.get('/', function (req, res) {
 })
 
 app.listen(port, () => console.log("Servidor HTTP escutando na porta "+port))
+*/
+
+//the dgram module provides an implementation of UDP sockets
+const dgram = require('dgram')
+const server = dgram.createSocket('udp4')
+
+server.on('error', function (err) {
+	console.log(`server error:\n${err.stack}`)
+	server.close()
+})
+
+server.on('message', (msg, rinfo) => {
+  console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+});
+
+server.on('listening', () => {
+  const address = server.address();
+  console.log(`server listening ${address.address}:${address.port}`);
+});
+
+server.bind(41234, () => {
+	server.addMembership('239.255.255.250')
+})
+
+server.send(

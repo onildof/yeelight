@@ -41,4 +41,14 @@ server.bind(41234, () => {
 	server.addMembership('239.255.255.250')
 })
 
-server.send(
+server.send('M-SEARCH * HTTP/1.1\r\n'+
+			'HOST: 239.255.255.250:1982\r\n'+
+			'MAN: "ssdp:discover"\r\n'+
+			'ST: wifi_bulb\r\n',
+			1982,
+			'239.255.255.250',
+			function (err) {
+				if (err)
+					console.log(err)
+			}
+)
